@@ -1,9 +1,12 @@
 import axios from 'axios';
 import Form from 'react-bootstrap/Form'
 import Button from 'react-bootstrap/Button'
+import Table from 'react-bootstrap/Table'
 import Img from 'react-bootstrap/Image'
 import React from 'react';
 import 'bootstrap/dist/css/bootstrap.min.css';
+// import Weather from './component/weather';
+
 
 
 
@@ -16,13 +19,13 @@ constructor(props){
 
   this.state={
     lat :'',
-
     long : '',
-
     placeName : '',
-    
     errMassege:false,
     mapImg:false,
+    showWeather: false,
+    weatherErr: '',
+    renderedLocWeatherData:[],
 
   }
 }
@@ -30,9 +33,10 @@ constructor(props){
 getLocationinfo= async (event)=>{
   event.preventDefault();
 
-const placeName=event.target.placeName.value
-const key= 'pk.4e47bf6d397576710acc509953c29e71'
+const placeName=event.target.cityName.value
+const key= 'pk.43fed3791d35ddb76aa14f749c6d3080'
 const url=`https://api.locationiq.com/v1/autocomplete.php?key=${key}&q=${placeName}`
+let weatherData = `https://new-cit-api-haroun.herokuapp.com/weather?searchQuery=${placeName}`;
 
 try{
 let collectedData= await axios.get(url);
@@ -59,16 +63,31 @@ catch
     errMassege: true
   })
 }
+
+
+try {
+  let frontWeatherData = await axios.get(weatherData);
+  
+    this.setState({
+      renderedLocWeatherData: frontWeatherData.data,
+      showWeather: true,
+      
+    })
+  
+}
+catch {
+  this.setState({
+    weatherErr: 'sorry , no weather data availabe for your location',
+    showWeather: false,
+    
+
+  })
+
+}
 }
 
 render(){
   return(
-
-   
-
-
-
-
 
     <>
     
@@ -76,7 +95,7 @@ render(){
     <div style={{textAlign:'center'}}>
        <Form onSubmit={this.getLocationinfo}>
          
-         <input type='text' name="placeName"  />
+         <input type='text' name="cityName"  />
          <Button style={{ marginLeft: 60}} style={{backgroundColor: '#B61919' }} type='submit' > Get Location</Button>
        </Form>
        </div>
@@ -89,12 +108,22 @@ render(){
          </div>
    
    
-        {  this.state.mapImg && <Img   style={{ marginLeft:'15rem' }} src={`https://maps.locationiq.com/v3/staticmap?key=pk.4e47bf6d397576710acc509953c29e71&center=${this.state.lat},${this.state.long}&size=400x400`} />}
+        {  this.state.mapImg && <Img   style={{ marginLeft:'29rem' }} src={`https://maps.locationiq.com/v3/staticmap?key=pk.43fed3791d35ddb76aa14f749c6d3080&center=${this.state.lat},${this.state.long}&size=400x400`} />}
    
-        {this.state.errMassege && <p>You Have an Error</p>}
-         
-   
-   
+        {/* {this.state.errMassege && <p>You Have an Error</p>} */}
+
+        <div>
+            {
+              this.state.renderedLocWeatherData.map((weather) => {
+                return (
+                  <div>
+                    <p>{weather.date}</p>
+                    <p>{weather.description} </p>
+                  </div>
+                );
+              })}
+          </div>
+
        </>
      )
    }
