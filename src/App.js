@@ -34,8 +34,10 @@ getLocationinfo= async (event)=>{
   event.preventDefault();
 
 const placeName=event.target.cityName.value
-const key= 'pk.43fed3791d35ddb76aa14f749c6d3080'
-const url=`https://api.locationiq.com/v1/autocomplete.php?key=${key}&q=${placeName}`
+const REACT_APP_KEY= 'pk.43fed3791d35ddb76aa14f749c6d3080'
+const url=`https://api.locationiq.com/v1/autocomplete.php?key=${REACT_APP_KEY}&q=${placeName}`
+
+let serverRoute=process.env.REACT_APP_SERVER
 let weatherData = `https://new-cit-api-haroun.herokuapp.com/weather?searchQuery=${placeName}`;
 
 try{
@@ -69,7 +71,7 @@ try {
   let frontWeatherData = await axios.get(weatherData);
   
     this.setState({
-      renderedLocWeatherData: frontWeatherData.data,
+      renderedLocWeatherData: frontWeatherData  ,
       showWeather: true,
       
     })
@@ -123,6 +125,8 @@ render(){
                 );
               })}
           </div>
+
+          
 
        </>
      )
