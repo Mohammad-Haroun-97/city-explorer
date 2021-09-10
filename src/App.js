@@ -54,7 +54,7 @@ class App extends React.Component {
     }
 
     try{
-    let weatherData = `https://lab07-city-explorer.herokuapp.com/weather?searchQuery=${selectCity}`;
+    let weatherData = `${process.envREACT_APP_URL}/weather?searchQuery=${selectCity}`;
 
     let finalData= await axios.get(weatherData);
     this.setState({
