@@ -1,19 +1,40 @@
-import React, { Component } from 'react'
+import React from 'react';
+import ListGroup from 'react-bootstrap/ListGroup';
+import 'bootstrap/dist/css/bootstrap.min.css';
 
-export class weather extends Component {
+class Weather extends React.Component {
+
+  
+    
+
     render() {
         return (
+            <>
 
-            <tbody>
-                <tr>
-                    <td>{this.props.date}</td>
-                    <td>{this.props.description} </td>
-                </tr>
-            </tbody>
+               
 
+                    <ListGroup>
 
+                        <ListGroup.Item action variant="success">
+                            {this.props.weatherData[0].date} <br></br>
+                            {this.props.weatherData[0].description}
+                        </ListGroup.Item>
+                        <ListGroup.Item action variant="danger">
+                            {this.props.weatherData[1].date} <br></br>
+                            {this.props.weatherData[1].description}
+                        </ListGroup.Item>
+                        <ListGroup.Item action variant="warning">
+                            {this.props.weatherData[2].date} <br></br>
+                            {this.props.weatherData[2].description}
+                        </ListGroup.Item>
+
+                    </ListGroup>
+                
+                
+            </>
         )
     }
+
 }
 
-export default weather
+export default Weather;

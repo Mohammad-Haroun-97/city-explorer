@@ -6,7 +6,7 @@ import Table from "react-bootstrap/Table";
 import Img from "react-bootstrap/Image";
 import React from "react";
 import "bootstrap/dist/css/bootstrap.min.css";
-// import Weather from "./component/weather";
+import Weather from "./component/Weather";
 
 class App extends React.Component {
   constructor(props) {
@@ -18,9 +18,10 @@ class App extends React.Component {
       placeName: "",
       errMassege: false,
       mapImg: false,
-      // showWeather: false,
+      showWeather: false,
       weatherErr: "",
       // renderedLocWeatherData:[],
+     fixedWeatherDataItem : [],
     };
   }
 
@@ -52,6 +53,30 @@ class App extends React.Component {
       });
     }
 
+    try{
+    let weatherData = `https://lab07-city-explorer.herokuapp.com/weather?searchQuery=${selectCity}`;
+
+    let finalData= await axios.get(weatherData);
+    this.setState({
+
+      fixedWeatherDataItem:finalData.data,
+      showWeather :true,
+    })
+  }
+  catch {
+    
+    this.setState({
+      showWeather :false,
+    });
+  }
+
+
+  }
+
+
+
+
+
     // try {
 
     //   const weatherData = `http://api.weatherbit.io/v2.0/forecast/daily?city=${selectCity}&key=e2c95883c34745f58ae63470e722f634&format=json`;
@@ -73,7 +98,7 @@ class App extends React.Component {
     //   })
 
     // }
-  };
+  
 
   render() {
     return (
@@ -111,6 +136,13 @@ class App extends React.Component {
             <Card.Body>Error, The city Center is not valid</Card.Body>
           </Card>
         )}
+
+
+{this.state.showWeather &&
+        <Weather weatherData={this.state.fixedWeatherDataItem} ></Weather>}
+
+
+
 
         {/* <div> */}
         {/* {
