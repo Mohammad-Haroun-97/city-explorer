@@ -20,6 +20,7 @@ class App extends React.Component {
       mapImg: false,
       showWeather: false,
       weatherErr: "",
+      
       // renderedLocWeatherData:[],
      fixedWeatherDataItem : [],
     };
@@ -36,7 +37,7 @@ class App extends React.Component {
 
     try {
       let collectedData = await axios.get(url);
-      console.log(collectedData.data);
+      // console.log(collectedData.data);
 
       this.setState({
         lat: collectedData.data[0].lat,
@@ -53,21 +54,26 @@ class App extends React.Component {
       });
     }
 
+
+
     try{
-    let weatherData = `${process.envREACT_APP_URL}/weather?searchQuery=${selectCity}`;
+    let observed = `https://lab07-city-explorer.herokuapp.com/weather?searchQuery=${selectCity}`;
 
-    let finalData= await axios.get(weatherData);
-    this.setState({
+    let finalData= await axios.get(observed);
+     this.setState({
 
-      fixedWeatherDataItem:finalData.data,
+      fixedWeatherDataItem: finalData.data,
       showWeather :true,
     })
+    console.log(this.state.showWeather); 
   }
   catch {
     
     this.setState({
       showWeather :false,
+      
     });
+    console.log('hello');
   }
 
 
@@ -118,11 +124,14 @@ class App extends React.Component {
           </Form>
         </div>
 
+        {this.state.mapImg &&(
+
         <div style={{ textAlign: "center" }}>
           <p>Display name : {this.state.placeName}</p>
           <p>Lat : {this.state.lat}</p>
           <p>Lon : {this.state.long}</p>
         </div>
+         )}
 
         {this.state.mapImg && (
           <Img
@@ -139,22 +148,12 @@ class App extends React.Component {
 
 
 {this.state.showWeather &&
-        <Weather weatherData={this.state.fixedWeatherDataItem} ></Weather>}
+        <Weather weatherData={this.state.fixedWeatherDataItem} />}
 
 
 
 
-        {/* <div> */}
-        {/* {
-              this.state.renderedLocWeatherData.map((weather) => {
-                return (
-                  <div>
-                    <p>{weather.date}</p>
-                    <p>{weather.description} </p>
-                  </div>
-                );
-              })} */}
-        {/* </div> */}
+        
       </>
     );
   }

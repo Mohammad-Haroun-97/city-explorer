@@ -3,6 +3,9 @@ import ListGroup from 'react-bootstrap/ListGroup';
 import 'bootstrap/dist/css/bootstrap.min.css';
 
 class Weather extends React.Component {
+    constructor(props){
+        super(props)
+    }
 
   
     
