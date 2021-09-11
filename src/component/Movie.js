@@ -32,6 +32,9 @@ class Movie extends React.Component {
  <Container>
 <Row xs={3} md={4} className="g-4">
   
+    
+    
+    
     <Col>
       <Card>
         <Card.Img variant="top" src={`https://www.themoviedb.org/t/p/original/${this.props.image_ur}`} />
@@ -54,6 +57,9 @@ class Movie extends React.Component {
     </Card.Text>
         </Card.Body>
       </Card>
+   
+   
+   
     </Col>
   
 </Row>

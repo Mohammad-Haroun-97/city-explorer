@@ -13,9 +13,14 @@ class Weather extends React.Component {
 
     render() {
         return (
+
+
+
             <>
             <Container>
             <Row>
+
+
   
     <Col  sm={8}>
       <Card>
@@ -36,21 +41,7 @@ class Weather extends React.Component {
 </Row>
 </Container>
 
-            {/* <Row xs={3} md={4} className="g-4">
-  {Array.from({ length: 4 }).map((_, idx) => (
-    <Col>
-  
-    
-      
-        <ListGroup.Item action href="#link1">
-        {this.props.date}
-                             <br></br>
-                            {this.props.description}
-        </ListGroup.Item>
-       
-    </Col>
-    ))}
-    <Row/> */}
+           
     
     
 
