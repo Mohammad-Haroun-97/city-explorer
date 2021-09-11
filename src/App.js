@@ -7,6 +7,8 @@ import Img from "react-bootstrap/Image";
 import React from "react";
 import "bootstrap/dist/css/bootstrap.min.css";
 import Weather from "./component/Weather";
+import Movie from "./component/Movie";
+
 
 class App extends React.Component {
   constructor(props) {
@@ -20,9 +22,13 @@ class App extends React.Component {
       mapImg: false,
       showWeather: false,
       weatherErr: "",
+      moviesShow:false,
+
+      // dailyData: false,
       
       // renderedLocWeatherData:[],
      fixedWeatherDataItem : [],
+     moviesArray : [],
     };
   }
 
@@ -44,12 +50,14 @@ class App extends React.Component {
         long: collectedData.data[0].lon,
         placeName: collectedData.data[0].display_name,
         mapImg: true,
-        errMassege: false,
+        locationErr :false,
+        // errMassege: false,
+        // showWeather :true,
       });
     } catch {
       console.log("err");
       this.setState({
-        errMassege: true,
+        locationErr: true,
         mapImg: false,
       });
     }
@@ -57,27 +65,86 @@ class App extends React.Component {
 
 
     try{
-    let observed = `https://lab07-city-explorer.herokuapp.com/weather?searchQuery=${selectCity}`;
+    let observed = `https://lab08-city-api.herokuapp.com/weather?city=${selectCity}&key=e2c95883c34745f58ae63470e722f634`;
 
     let finalData= await axios.get(observed);
-     this.setState({
+    if (finalData.data !== 'Error, please enter a valid Data') {
+      this.setState({
 
-      fixedWeatherDataItem: finalData.data,
-      showWeather :true,
-    })
-    console.log(this.state.showWeather); 
-  }
+        fixedWeatherDataItem: finalData.data,
+        showWeather :true,
+        weatherError : false,
+      })
+      console.log(this.state.showWeather);
+    
+    }else{
+      this.setState({
+        showWeather :false,
+        weatherError : true,
+        
+      });
+
+
+    }
+
+      
+    }
+    
+     
   catch {
     
     this.setState({
       showWeather :false,
+      weatherError : true,
       
     });
     console.log('hello');
   }
 
 
+  try{
+
+    const moviesData=`https://lab08-city-api.herokuapp.com/movies?api_key=1742e55e6961c331f1b0e9a8c7b098f1&query=${selectCity}`
+
+    let frontMovieData= await axios.get(moviesData)
+    console.log(frontMovieData);
+    if (frontMovieData.data !== 'Error!, you are in catch side') {
+      
+    
+    this.setState({
+
+
+      moviesArray : frontMovieData.data,
+      moviesShow : true,
+
+    })
   }
+  else{
+    this.setState({
+      moviesShow : false,
+    })
+    
+
+  }
+
+    
+  }
+
+  catch{
+    this.setState({
+      moviesShow : false,
+    })
+    
+
+
+  }
+
+
+  }
+
+
+
+ 
 
 
 
@@ -141,19 +208,56 @@ class App extends React.Component {
         )}
 
         {this.state.errMassege && (
-          <Card>
+          
             <Card.Body>Error, The city Center is not valid</Card.Body>
-          </Card>
+          
         )}
 
-
-{this.state.showWeather &&
-        <Weather weatherData={this.state.fixedWeatherDataItem} />}
-
-
-
-
+{this.state.locationErr && (
+          
+          <Card.Body>Error, The city that you inserted is not valid</Card.Body>
         
+      )}
+
+
+
+
+{this.state.showWeather &&( this.state.fixedWeatherDataItem.map((element) => {
+              return (<Weather
+              date={element.date}
+                description={element.description}
+                
+              />
+              )
+            }))}
+
+            {this.state.weatherError&&(
+              <Card.Body></Card.Body>
+
+
+            )}
+
+
+
+{this.state.moviesShow &&( this.state.moviesArray.map((element) => {
+              return (<Movie 
+                
+                image_ur={element.image_ur}
+                title={element.original_title}
+                overview={element.overview}
+                average_votes={element.average_votes}
+                popularity={element.popularity}
+                released_on={element.released_on}
+                
+              />
+              )
+            }))}
+
+
+
+
+            
+
       </>
     );
   }
