@@ -68,20 +68,34 @@ class App extends React.Component {
     let observed = `https://lab08-city-api.herokuapp.com/weather?city=${selectCity}&key=e2c95883c34745f58ae63470e722f634`;
 
     let finalData= await axios.get(observed);
-    
-     this.setState({
+    if (finalData.data !== 'Error, please enter a valid Data') {
+      this.setState({
 
-      fixedWeatherDataItem: finalData.data,
-      showWeather :true,
-    })
-    console.log(this.state.showWeather);
-  
-  }
+        fixedWeatherDataItem: finalData.data,
+        showWeather :true,
+        weatherError : false,
+      })
+      console.log(this.state.showWeather);
+    
+    }else{
+      this.setState({
+        showWeather :false,
+        weatherError : true,
+        
+      });
+
+
+    }
+
+      
+    }
+    
+     
   catch {
     
     this.setState({
       showWeather :false,
-      errMassege: true,
+      weatherError : true,
       
     });
     console.log('hello');
@@ -93,12 +107,25 @@ class App extends React.Component {
     const moviesData=`https://lab08-city-api.herokuapp.com/movies?api_key=1742e55e6961c331f1b0e9a8c7b098f1&query=${selectCity}`
 
     let frontMovieData= await axios.get(moviesData)
+    console.log(frontMovieData);
+    if (frontMovieData.data !== 'Error!, you are in catch side') {
+      
+    
     this.setState({
+
 
       moviesArray : frontMovieData.data,
       moviesShow : true,
 
     })
+  }
+  else{
+    this.setState({
+      moviesShow : false,
+    })
+    
+
+  }
 
     
   }
@@ -188,7 +215,7 @@ class App extends React.Component {
 
 {this.state.locationErr && (
           
-          <Card.Body>Error, The city Center is not valid</Card.Body>
+          <Card.Body>Error, The city that you inserted is not valid</Card.Body>
         
       )}
 
@@ -204,11 +231,12 @@ class App extends React.Component {
               )
             }))}
 
-{this.state.dailyData && (
-          <Card>
-            <Card.Body>Error, The city Center is not valid</Card.Body>
-          </Card>
-        )}
+            {this.state.weatherError&&(
+              <Card.Body></Card.Body>
+
+
+            )}
+
 
 
 {this.state.moviesShow &&( this.state.moviesArray.map((element) => {
